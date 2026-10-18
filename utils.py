@@ -21,9 +21,9 @@ def open_page(sign_in = False):
     get_driver().get(url)
     if sign_in:
         return
-    profile_button_status = WebDriverWait(get_driver(), 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-tid="me-control-avatar-presence"]')))
-    if profile_button_status.get_attribute("aria-label") == "unknown":
-        raise SignInException("Not on the main page interface...")
+    element = WebDriverWait(get_driver(), 15).until(EC.visibility_of_element_located((By.CSS_SELECTOR, '#loginHeader, [data-tid="me-control-avatar-presence"]')))
+    if (element.get_attribute("id") == "loginHeader" and get_driver().title == "Sign in to your account") or (element.get_attribute("aria-label") == "unknown"):
+        raise SignInException("User is not signed-in properly....")
     return
 
 def clear_cache():

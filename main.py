@@ -25,8 +25,10 @@ for _ in range(3):
         set_driver()
         open_page()
         break
-    except (TimeoutException, SignInException):
+    except (TimeoutException, SignInException) as e:
+        print(e)
         close_window()
+        time.sleep(.5)
         clear_cache()
         open_window()
         set_driver()
