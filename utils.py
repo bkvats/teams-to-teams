@@ -1,12 +1,20 @@
-from selenium.common.exceptions import NoSuchElementException
+import sys
+from driver import get_driver
+import shutil
+from pathlib import Path
 
-def get_current_status(driver, By):
-    try:
-        driver.find_element(By.CSS_SELECTOR, '[data-tid="set-presence-status-menu-item"]')
-    except NoSuchElementException:
-        avatar_panel = driver.find_element(By.CSS_SELECTOR, '[data-tid="me-control-avatar-trigger"]')
-        avatar_panel.click()
-        current_status = get_current_status(driver, By)
-        avatar_panel.click()
-        return current_status
-    return driver.execute_script("""return document.querySelector('[data-tid="set-presence-status-menu-item"]').firstElementChild.nextElementSibling.innerText;""")
+def exit_program():
+    print("**** Thanks for using my code ****")
+    sys.exit(0)
+    return
+
+
+def open_page():
+    print("trying to open page...")
+    get_driver().get("https://teams.microsoft.com/v2/")
+    return
+
+def clear_cache():
+    shutil.rmtree(str(Path.home() / "ChromeDebug"))
+    print("Cached clear succesfully")
+    return
