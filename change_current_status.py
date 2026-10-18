@@ -3,6 +3,8 @@ from get_current_status import get_current_status
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from driver import get_driver
+import time
+
 
 status_data = [[], ["Available", "me_control_presence_availability_available"], ["Busy", "me_control_presence_availability_busy"], ["Do not disturb", "me_control_presence_availability_do_not_disturb"], ["Be right back", "me_control_presence_availability_be_right_back"], ["Away", "me_control_presence_availability_appear_away"], ["Offline", "me_control_presence_availability_appear_offline"]]
 
@@ -32,6 +34,7 @@ def change_current_status():
         elif (user_input == ""):
             exit_program
         elif user_input in {str(x) for x in range(1, len(status_data) + 1)}:
+            previous_status = get_current_status()
             new_status = status_data[int(user_input)]
             get_driver().execute_script("""document.querySelector("[data-tid='me-control-avatar-trigger']").click();""")
             try:
@@ -41,7 +44,14 @@ def change_current_status():
             get_driver().find_element(By.CSS_SELECTOR, '[data-tid="set-presence-status-menu-item"]').click()
             get_driver().find_element(By.CSS_SELECTOR, f'[data-tid="{new_status[1]}"]').click()
             get_driver().execute_script("""document.querySelector("[data-tid='me-control-avatar-trigger']").click();""")
-            print(f"Status changed succesfully\nCURRENT STATUS: {get_current_status()}\n")
+            for _ in range(5):
+                if (get_current_status() != previous_status):
+                    print(f"Status changed succesfully\nCURRENT STATUS: {get_current_status()}\n")
+                    break
+                time.sleep(.5)
+            else:
+                print("Can't change status right now! Try restarting the program...")
+            return
         else:
             print("Kindly enter the correct input as per instructions")
             print_instructions()

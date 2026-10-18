@@ -1,3 +1,9 @@
 Start by opening a chrome instance using the following command:
 
-"C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9973 --user-data-dir="C:\ChromeDebug"
+"C:/Program Files/Google/Chrome/Application/chrome.exe" --remote-debugging-port=9973 --user-data-dir="C:/Users/userNotFound"
+
+"C:/Program Files/Google/Chrome/Application/chrome.exe" --remote-debugging-port=9222 --user-data-dir="C:/Users/userNotFound" --new-window --no-first-run --disable-extensions --disable-notifications
+
+"C:/Program Files/Google/Chrome/Application/chrome.exe" --remote-debugging-port=9222 --user-data-dir="C:/Users/userNotFound" --app="https://teams.microsoft.com"
+
+"C:/Program Files/Google/Chrome/Application/chrome.exe" --remote-debugging-port={port} --user-data-dir={str(Path.home() / "ChromeDebug")} --no-first-run --no-default-browser-check --disable-extensions --disable-notification

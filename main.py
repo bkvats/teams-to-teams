@@ -2,40 +2,39 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
 import sys, time
 
 from config import close_window, open_window
-from driver import setup_driver, get_driver
+from driver import set_driver, get_driver
 from utils import open_page, exit_program, clear_cache
 from get_current_status import get_current_status
 from change_current_status import change_current_status
+from exceptions import SignInException
 
 close_window()
-open_window()
-setup_driver()
+open_window(show_window=False)
+set_driver()
+print("Starting the engine....")
 
 for _ in range(3):
-    open_page()
     try:
-        # profile_button_status = WebDriverWait(get_driver(), 60).until(EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-tid="me-control-avatar-presence"]')))
-        if True or profile_button_status.get_attribute("aria-label") == "unknown":
-            close_window()
-            clear_cache()
-            open_window()
-            time.sleep(2)
-            close_window()
-            open_window()
-            setup_driver()
-            open_page()
-            input("Looks like you need to sign-in, kindly try signing again and then hit enter: ")
-        else:
-            break
-    except Exception as e:
-        print(e)
-        print("Not on the chatting interface page....")
-        sys.exit(0)
+        open_page()
+        close_window()
+        open_window()
+        set_driver()
+        open_page()
+        break
+    except (TimeoutException, SignInException):
+        close_window()
+        clear_cache()
+        open_window()
+        set_driver()
+        open_page(sign_in=True)
+        input("Looks like you need to sign-in, kindly try signing again and then hit enter: ")
+
 else:
-    print("Too many unsuccesful attempts\\nExiting....")
+    print("Too many unsuccesful attempts\nExiting....")
     exit_program()
 
 def print_instructions():
@@ -54,7 +53,7 @@ while user_input:
     if (user_input == "" or user_input == "0"):
         exit_program()
     elif (user_input == "1"):
-        print(f"-------------------\\nCurrent Status: {get_current_status()}\\n-------------------")
+        print(f"-------------------\nCurrent Status: {get_current_status()}\n-------------------")
     elif (user_input == "2"):
         change_current_status()
         print_instructions()
